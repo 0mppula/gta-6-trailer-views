@@ -1,23 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
+import CounterAnimation from './components/CounterAnimation';
+import Header from './components/Header';
+import TotalViews from './components/TotalViews';
 import { GTA_6_TRAILER_VIDEO_IDS } from './constants';
+import { formatViews } from './helpers';
 import type { VideoData } from './types';
 
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 
 const POLL_INTERVAL = 60_000; // 60 seconds
-
-function formatViews(n: number | null | undefined): string {
-	if (n === null || n === undefined) return '—';
-	if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(2) + 'B';
-	if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + 'M';
-	if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
-	return n.toLocaleString();
-}
-
-function formatNumber(n: number | null | undefined): string {
-	if (n === null || n === undefined) return '—';
-	return n.toLocaleString();
-}
 
 async function fetchYouTubeVideoData(
 	videoId: string,
@@ -42,42 +33,6 @@ async function fetchYouTubeVideoData(
 		views: Number(item.statistics.viewCount),
 		title: item.snippet.title || null,
 	};
-}
-
-interface CounterAnimationProps {
-	value: number | null;
-}
-
-function CounterAnimation({ value }: CounterAnimationProps) {
-	const [display, setDisplay] = useState(value);
-	const prevRef = useRef(value);
-
-	useEffect(() => {
-		if (value === null) return;
-		const start = prevRef.current || 0;
-		const end = value;
-		const duration = 1200;
-		const steps = 40;
-		const increment = (end - start) / steps;
-		let current = start;
-		let step = 0;
-
-		const timer = setInterval(() => {
-			step++;
-			current += increment;
-			if (step >= steps) {
-				setDisplay(end);
-				clearInterval(timer);
-			} else {
-				setDisplay(Math.round(current));
-			}
-		}, duration / steps);
-
-		prevRef.current = end;
-		return () => clearInterval(timer);
-	}, [value]);
-
-	return <span>{formatNumber(display)}</span>;
 }
 
 interface PulseRingProps {
@@ -194,38 +149,11 @@ export default function App() {
 				<div className="scanline" />
 
 				<div className="content">
-					<div className="header">
-						<div className="channel-tag">⊞ Rockstar Games · YouTube</div>
-						<h1 className="title">
-							GTA 6
-							<br />
-							<span>Trailer</span>
-							<br />
-							Views
-						</h1>
-						<p className="subtitle">Combined video performance dashboard</p>
-					</div>
+					<Header gameName="GTA 6" />
 
 					<div className="divider" />
 
-					<div className="total-block">
-						<div className="total-label">◈ Total Combined Views</div>
-						<div className="total-value">
-							{totalViews !== null ? (
-								<CounterAnimation value={totalViews} />
-							) : (
-								<div
-									className="loading-shimmer"
-									style={{ height: 60, width: 260 }}
-								/>
-							)}
-						</div>
-						{totalViews !== null && (
-							<div className="total-formatted">
-								{formatViews(totalViews)} views combined
-							</div>
-						)}
-					</div>
+					<TotalViews totalViews={totalViews} />
 
 					<div className="videos-grid">
 						{videos.map((v) => {
