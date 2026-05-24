@@ -6,3 +6,5 @@ export interface VideoData {
 	loading: boolean;
 	error: string | null;
 }
+
+export type VideoId = Pick<VideoData, 'id' | 'label'>;

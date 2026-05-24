@@ -11,19 +11,11 @@ export const GTA_6_TRAILER_VIDEO_IDS = [
 
 export const GTA_5_TRAILER_VIDEO_IDS = [
 	{
-		id: 'QdBZY2fkU-0',
-		label: 'Grand Theft Auto V Trailer',
-	},
-	{
 		id: 'QkkoHAzjnUs',
 		label: 'Grand Theft Auto V Trailer',
 	},
 	{
 		id: 'N-xHcvug3WI',
-		label: 'Grand Theft Auto V Trailer',
-	},
-	{
-		id: 'hvoD7ehZPcM',
 		label: 'Grand Theft Auto V Trailer',
 	},
 	{
