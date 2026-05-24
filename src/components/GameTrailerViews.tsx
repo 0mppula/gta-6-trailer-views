@@ -1,8 +1,9 @@
-import Header from './components/Header';
-import TotalViews from './components/TotalViews';
-import TrailerVideos from './components/TrailerVideos';
-import { POLL_INTERVAL, useTrailerViews } from './hooks/useTrailerViews';
-import type { VideoId } from './types';
+import React from 'react';
+import Header from './Header';
+import TotalViews from './TotalViews';
+import TrailerVideos from './TrailerVideos';
+import { POLL_INTERVAL, useTrailerViews } from '../hooks/useTrailerViews';
+import type { VideoId } from '../types';
 
 interface PulseRingProps {
 	active: boolean;
@@ -16,7 +17,7 @@ function PulseRing({ active }: PulseRingProps) {
 				width: 10,
 				height: 10,
 				borderRadius: '50%',
-				background: active ? '#d883c4' : '#444',
+				background: active ? 'var(--accent-color)' : '#444',
 				boxShadow: active ? '0 0 0 0 rgba(255,204,51,0.7)' : 'none',
 				animation: active ? 'pulse 1.4s infinite' : 'none',
 				marginRight: 8,
@@ -29,14 +30,19 @@ function PulseRing({ active }: PulseRingProps) {
 interface GameTrailerViewsProps {
 	gameName: string;
 	videoIds: VideoId[];
+	accentColor?: string;
 }
 
-const GameTrailerViews = ({ gameName, videoIds }: GameTrailerViewsProps) => {
+const GameTrailerViews = ({
+	gameName,
+	videoIds,
+	accentColor = '#d883c4',
+}: GameTrailerViewsProps) => {
 	const { videos, totalViews, lastUpdated, polling, countdown, fetchAll, formatViews } =
 		useTrailerViews(videoIds);
 
 	return (
-		<div className="app">
+		<div className="app" style={{ '--accent-color': accentColor } as React.CSSProperties}>
 			<div className="noise" />
 			<div className="scanline" />
 

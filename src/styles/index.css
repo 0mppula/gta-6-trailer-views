@@ -225,7 +225,7 @@ body {
 	font-family: 'DM Mono', monospace;
 	font-size: 11px;
 	letter-spacing: 0.25em;
-	color: #d883c4;
+	color: var(--accent-color);
 	text-transform: uppercase;
 	margin-bottom: 12px;
 }
@@ -240,7 +240,7 @@ body {
 }
 
 .title span {
-	color: #d883c4;
+	color: var(--accent-color);
 }
 
 .subtitle {
@@ -254,7 +254,7 @@ body {
 .total-block {
 	background: #111;
 	border: 1px solid #222;
-	border-top: 2px solid #d883c4;
+	border-top: 2px solid var(--accent-color);
 	padding: 24px;
 	margin-bottom: 24px;
 	position: relative;
@@ -280,7 +280,7 @@ body {
 .total-value {
 	font-family: 'Bebas Neue', sans-serif;
 	font-size: clamp(48px, 12vw, 80px);
-	color: #d883c4;
+	color: var(--accent-color);
 	letter-spacing: 0.02em;
 	line-height: 1;
 }
@@ -324,7 +324,7 @@ body {
 	left: 0;
 	right: 0;
 	height: 1px;
-	background: linear-gradient(90deg, transparent, #d883c4, transparent);
+	background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
 	opacity: 0;
 	transition: opacity 0.3s;
 }
@@ -431,8 +431,8 @@ body {
 }
 
 .refresh-btn:hover {
-	border-color: #d883c4;
-	color: #d883c4;
+	border-color: var(--accent-color);
+	color: var(--accent-color);
 }
 
 .refresh-btn:disabled {
@@ -449,7 +449,7 @@ body {
 
 .countdown-fill {
 	height: 100%;
-	background: #d883c4;
+	background: var(--accent-color);
 	transition: width 1s linear;
 }
 
