@@ -1,3 +1,5 @@
+import Nav from './Nav';
+
 interface HeaderProps {
 	gameName: string;
 }
@@ -5,7 +7,7 @@ interface HeaderProps {
 const Header = ({ gameName }: HeaderProps) => {
 	return (
 		<div className="header">
-			<div className="channel-tag">⊞ Rockstar Games · YouTube</div>
+			<Nav />
 			<h1 className="title">
 				{gameName}
 				<br />

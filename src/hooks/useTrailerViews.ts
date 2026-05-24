@@ -45,11 +45,25 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 			error: null,
 		})),
 	);
+	const [prevVideoIds, setPrevVideoIds] = useState(videoIds);
 	const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 	const [polling, setPolling] = useState(false);
 	const [countdown, setCountdown] = useState(POLL_INTERVAL / 1000);
 	const countdownRef = useRef<number | null>(null);
 	const pollRef = useRef<number | null>(null);
+
+	if (prevVideoIds !== videoIds) {
+		setPrevVideoIds(videoIds);
+		setVideos(
+			videoIds.map((v) => ({
+				...v,
+				views: null,
+				title: null,
+				loading: true,
+				error: null,
+			})),
+		);
+	}
 
 	const fetchAll = useCallback(async () => {
 		setPolling(true);
@@ -60,6 +74,7 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 		setVideos((prev) =>
 			prev.map((v, i) => {
 				const result = results[i];
+				if (!result) return v; // ← guard for unmount mid-fetch
 				if (result.status === 'fulfilled') {
 					return {
 						...v,
