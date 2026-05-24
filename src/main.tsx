@@ -3,7 +3,12 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import GameTrailerViews from './components/GameTrailerViews.tsx';
-import { GTA_5_TRAILER_VIDEO_IDS, GTA_6_TRAILER_VIDEO_IDS } from './constants';
+import {
+	GTA_5_ACCENT_COLOR,
+	GTA_5_TRAILER_VIDEO_IDS,
+	GTA_6_ACCENT_COLOR,
+	GTA_6_TRAILER_VIDEO_IDS,
+} from './constants';
 import './styles/index.css';
 
 const router = createBrowserRouter([
@@ -13,7 +18,7 @@ const router = createBrowserRouter([
 			<GameTrailerViews
 				gameName="GTA 6"
 				videoIds={GTA_6_TRAILER_VIDEO_IDS}
-				accentColor="#d883c4"
+				accentColor={GTA_6_ACCENT_COLOR}
 			/>
 		),
 	},
@@ -23,7 +28,7 @@ const router = createBrowserRouter([
 			<GameTrailerViews
 				gameName="GTA 5"
 				videoIds={GTA_5_TRAILER_VIDEO_IDS}
-				accentColor="#84c43b"
+				accentColor={GTA_5_ACCENT_COLOR}
 			/>
 		),
 	},

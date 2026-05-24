@@ -1,3 +1,6 @@
+export const GTA_6_ACCENT_COLOR = '#d883c4';
+export const GTA_5_ACCENT_COLOR = '#84c43b';
+
 export const GTA_6_TRAILER_VIDEO_IDS = [
 	{
 		id: 'QdBZY2fkU-0',

@@ -1,9 +1,10 @@
 import React from 'react';
+import { GTA_6_ACCENT_COLOR } from '../constants';
+import { POLL_INTERVAL, useTrailerViews } from '../hooks/useTrailerViews';
+import type { VideoId } from '../types';
 import Header from './Header';
 import TotalViews from './TotalViews';
 import TrailerVideos from './TrailerVideos';
-import { POLL_INTERVAL, useTrailerViews } from '../hooks/useTrailerViews';
-import type { VideoId } from '../types';
 
 interface PulseRingProps {
 	active: boolean;
@@ -36,7 +37,7 @@ interface GameTrailerViewsProps {
 const GameTrailerViews = ({
 	gameName,
 	videoIds,
-	accentColor = '#d883c4',
+	accentColor = GTA_6_ACCENT_COLOR,
 }: GameTrailerViewsProps) => {
 	const { videos, totalViews, lastUpdated, polling, countdown, fetchAll, formatViews } =
 		useTrailerViews(videoIds);
