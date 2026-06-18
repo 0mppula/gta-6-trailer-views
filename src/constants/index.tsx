@@ -10,6 +10,10 @@ export const GTA_6_TRAILER_VIDEO_IDS = [
 		id: 'VQRLujxTm3c',
 		label: 'Grand Theft Auto VI Trailer 2',
 	},
+	{
+		id: 'EiQEBYDox_k',
+		label: 'Grand Theft Auto VI: Official Cover Art Reveal',
+	},
 ];
 
 export const GTA_5_TRAILER_VIDEO_IDS = [
