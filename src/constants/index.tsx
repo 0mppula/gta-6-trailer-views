@@ -14,6 +14,10 @@ export const GTA_6_TRAILER_VIDEO_IDS = [
 		id: 'EiQEBYDox_k',
 		label: 'Grand Theft Auto VI: Official Cover Art Reveal',
 	},
+	{
+		id: 'qq76pQsI1iw',
+		label: 'Grand Theft Auto VI: An Extended Look Coming August 27',
+	},
 ];
 
 export const GTA_5_TRAILER_VIDEO_IDS = [
