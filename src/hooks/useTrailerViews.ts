@@ -7,7 +7,7 @@ export const POLL_INTERVAL = 60_000;
 
 async function fetchYouTubeVideoData(
 	videoId: string,
-): Promise<{ views: number; title: string | null }> {
+): Promise<{ views: number; title: string | null; publishedAt: string | null }> {
 	const response = await fetch(
 		`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}&key=${API_KEY}`,
 	);
@@ -22,6 +22,7 @@ async function fetchYouTubeVideoData(
 	return {
 		views: Number(item.statistics.viewCount),
 		title: item.snippet.title || null,
+		publishedAt: item.snippet.publishedAt || null,
 	};
 }
 
@@ -41,6 +42,7 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 			...v,
 			views: null,
 			title: null,
+			publishedAt: null,
 			loading: true,
 			error: null,
 		})),
@@ -59,6 +61,7 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 				...v,
 				views: null,
 				title: null,
+				publishedAt: null,
 				loading: true,
 				error: null,
 			})),
@@ -74,16 +77,19 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 		setVideos((prev) =>
 			prev.map((v, i) => {
 				const result = results[i];
-				if (!result) return v; // ← guard for unmount mid-fetch
+				if (!result) return v;
+
 				if (result.status === 'fulfilled') {
 					return {
 						...v,
 						views: result.value.views,
 						title: result.value.title,
+						publishedAt: result.value.publishedAt, // ← missing
 						loading: false,
 						error: null,
 					};
 				}
+
 				return { ...v, loading: false, error: 'Fetch failed' };
 			}),
 		);

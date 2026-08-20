@@ -3,6 +3,7 @@ export interface VideoData {
 	label: string;
 	views: number | null;
 	title: string | null;
+	publishedAt: string | null;
 	loading: boolean;
 	error: string | null;
 }

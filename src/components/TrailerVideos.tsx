@@ -63,7 +63,10 @@ const ClickableContent = ({ v, href, formatViews }: ClickableContentProps) => (
 			<CounterAnimation value={v.views} />
 		</div>
 
-		<div className="video-views-label">views · {formatViews(v.views)}</div>
+		<div className="video-views-label">
+			{formatViews(v.views)} Views ·{' '}
+			{v.publishedAt && new Date(v.publishedAt).toLocaleDateString('en-GB')}
+		</div>
 	</a>
 );
 
