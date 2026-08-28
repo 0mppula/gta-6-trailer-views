@@ -18,6 +18,10 @@ export const GTA_6_TRAILER_VIDEO_IDS = [
 		id: 'qq76pQsI1iw',
 		label: 'Grand Theft Auto VI: An Extended Look Coming August 27',
 	},
+	{
+		id: 'tJbzMqJGH4k',
+		label: 'Grand Theft Auto VI: An Extended Look',
+	},
 ];
 
 export const GTA_5_TRAILER_VIDEO_IDS = [
