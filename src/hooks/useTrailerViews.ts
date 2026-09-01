@@ -1,3 +1,4 @@
+import { formatDistanceToNow } from 'date-fns';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { formatViews } from '../helpers';
 import type { VideoData, VideoId } from '../types';
@@ -58,14 +59,7 @@ function saveSnapshot(
 }
 
 export function formatTimeAgo(timestamp: number): string {
-	const diff = Date.now() - timestamp;
-	const minutes = Math.floor(diff / 60_000);
-	const hours = Math.floor(diff / 3_600_000);
-	const days = Math.floor(diff / 86_400_000);
-	if (days > 0) return `${days}d ago`;
-	if (hours > 0) return `${hours}h ago`;
-	if (minutes > 0) return `${minutes}m ago`;
-	return 'just now';
+	return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
 }
 
 export interface UseTrailerViewsResult {
