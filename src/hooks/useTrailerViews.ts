@@ -75,7 +75,6 @@ export interface UseTrailerViewsResult {
 
 export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 	const snapshot = loadSnapshot();
-	const snapshotSavedRef = useRef(false);
 
 	const [videos, setVideos] = useState<VideoData[]>(
 		videoIds.map((v) => ({
@@ -116,12 +115,13 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 		setPolling(true);
 		setVideos((prev) => prev.map((v) => ({ ...v, loading: true, error: null })));
 
+		// Load old snapshot before fetching
+		const oldSnapshot = loadSnapshot();
+
 		const results = await Promise.allSettled(videoIds.map((v) => fetchYouTubeVideoData(v.id)));
 
-		if (!snapshotSavedRef.current) {
-			saveSnapshot(videoIds, results);
-			snapshotSavedRef.current = true;
-		}
+		// Save new snapshot after fetching
+		saveSnapshot(videoIds, results);
 
 		setVideos((prev) =>
 			prev.map((v, i) => {
@@ -132,7 +132,7 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 					return {
 						...v,
 						views: result.value.views,
-						previousViews: v.previousViews,
+						previousViews: oldSnapshot[v.id] ?? null, // ← use old snapshot
 						title: result.value.title,
 						publishedAt: result.value.publishedAt,
 						loading: false,
