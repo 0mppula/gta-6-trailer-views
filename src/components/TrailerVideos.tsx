@@ -92,7 +92,7 @@ const ClickableContent = ({ v, href, formatViews, index, snapshotTime }: Clickab
 			</div>
 
 			{viewDiff !== null && snapshotTime !== null && (
-				<div className="video-views-label" style={{ color: '#555' }}>
+				<div className="video-views-label" style={{ color: '#444' }}>
 					+{formatViews(viewDiff)} · {formatTimeAgo(snapshotTime)}
 				</div>
 			)}
