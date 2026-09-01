@@ -9,8 +9,8 @@ interface TrailerVideosProps {
 const TrailerVideos = ({ videos, formatViews }: TrailerVideosProps) => {
 	return (
 		<div className="videos-grid">
-			{videos.map((v) => (
-				<VideoCard key={v.id} video={v} formatViews={formatViews} />
+			{videos.map((v, i) => (
+				<VideoCard key={v.id} video={v} formatViews={formatViews} index={i + 1} />
 			))}
 		</div>
 	);
@@ -19,16 +19,17 @@ const TrailerVideos = ({ videos, formatViews }: TrailerVideosProps) => {
 interface VideoCardProps {
 	video: VideoData;
 	formatViews: (views: number | null) => string;
+	index: number;
 }
 
-const VideoCard = ({ video: v, formatViews }: VideoCardProps) => {
+const VideoCard = ({ video: v, formatViews, index }: VideoCardProps) => {
 	const href = `https://www.youtube.com/watch?v=${v.id}`;
 	const isClickable = !v.loading && !v.error;
 
 	return (
 		<div className="video-card">
 			{isClickable ? (
-				<ClickableContent v={v} href={href} formatViews={formatViews} />
+				<ClickableContent v={v} href={href} formatViews={formatViews} index={index} />
 			) : (
 				<NonClickableContent v={v} />
 			)}
@@ -40,9 +41,10 @@ interface ClickableContentProps {
 	v: VideoData;
 	href: string;
 	formatViews: (views: number | null) => string;
+	index: number;
 }
 
-const ClickableContent = ({ v, href, formatViews }: ClickableContentProps) => (
+const ClickableContent = ({ v, href, formatViews, index }: ClickableContentProps) => (
 	<a
 		href={href}
 		target="_blank"
@@ -57,6 +59,7 @@ const ClickableContent = ({ v, href, formatViews }: ClickableContentProps) => (
 				alt={v.title || v.label}
 				className="video-thumbnail"
 			/>
+			<div className="video-index">#{index}</div>
 		</div>
 
 		<div className="video-views">
