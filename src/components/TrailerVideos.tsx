@@ -1,16 +1,24 @@
+import { formatTimeAgo } from '../hooks/useTrailerViews';
 import type { VideoData } from '../types';
 import CounterAnimation from './CounterAnimation';
 
 interface TrailerVideosProps {
 	videos: VideoData[];
 	formatViews: (views: number | null) => string;
+	snapshotTime: number | null;
 }
 
-const TrailerVideos = ({ videos, formatViews }: TrailerVideosProps) => {
+const TrailerVideos = ({ videos, formatViews, snapshotTime }: TrailerVideosProps) => {
 	return (
 		<div className="videos-grid">
 			{videos.map((v, i) => (
-				<VideoCard key={v.id} video={v} formatViews={formatViews} index={i + 1} />
+				<VideoCard
+					key={v.id}
+					video={v}
+					formatViews={formatViews}
+					index={i + 1}
+					snapshotTime={snapshotTime}
+				/>
 			))}
 		</div>
 	);
@@ -20,16 +28,23 @@ interface VideoCardProps {
 	video: VideoData;
 	formatViews: (views: number | null) => string;
 	index: number;
+	snapshotTime: number | null;
 }
 
-const VideoCard = ({ video: v, formatViews, index }: VideoCardProps) => {
+const VideoCard = ({ video: v, formatViews, index, snapshotTime }: VideoCardProps) => {
 	const href = `https://www.youtube.com/watch?v=${v.id}`;
 	const isClickable = !v.loading && !v.error;
 
 	return (
 		<div className="video-card">
 			{isClickable ? (
-				<ClickableContent v={v} href={href} formatViews={formatViews} index={index} />
+				<ClickableContent
+					v={v}
+					href={href}
+					formatViews={formatViews}
+					index={index}
+					snapshotTime={snapshotTime}
+				/>
 			) : (
 				<NonClickableContent v={v} />
 			)}
@@ -42,13 +57,12 @@ interface ClickableContentProps {
 	href: string;
 	formatViews: (views: number | null) => string;
 	index: number;
+	snapshotTime: number | null;
 }
 
-const ClickableContent = ({ v, href, formatViews, index }: ClickableContentProps) => {
+const ClickableContent = ({ v, href, formatViews, index, snapshotTime }: ClickableContentProps) => {
 	const viewDiff =
-		v.previousViews !== null && v.views !== null && v.views !== v.previousViews
-			? v.views - v.previousViews
-			: null;
+		v.previousViews !== null && v.views !== null ? v.views - v.previousViews : null;
 
 	return (
 		<a
@@ -77,9 +91,9 @@ const ClickableContent = ({ v, href, formatViews, index }: ClickableContentProps
 				{v.publishedAt && new Date(v.publishedAt).toLocaleDateString('en-GB')}
 			</div>
 
-			{viewDiff !== null && (
+			{viewDiff !== null && snapshotTime !== null && (
 				<div className="video-views-label" style={{ color: '#555' }}>
-					+{formatViews(viewDiff)} since last visit
+					+{formatViews(viewDiff)} · {formatTimeAgo(snapshotTime)}
 				</div>
 			)}
 		</a>

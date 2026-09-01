@@ -1,10 +1,9 @@
 import React from 'react';
-import { GTA_6_ACCENT_COLOR } from '../constants';
-import { POLL_INTERVAL, useTrailerViews } from '../hooks/useTrailerViews';
-import type { VideoId } from '../types';
 import Header from './Header';
 import TotalViews from './TotalViews';
 import TrailerVideos from './TrailerVideos';
+import { POLL_INTERVAL, useTrailerViews } from '../hooks/useTrailerViews';
+import type { VideoId } from '../types';
 
 interface PulseRingProps {
 	active: boolean;
@@ -37,10 +36,18 @@ interface GameTrailerViewsProps {
 const GameTrailerViews = ({
 	gameName,
 	videoIds,
-	accentColor = GTA_6_ACCENT_COLOR,
+	accentColor = '#d883c4',
 }: GameTrailerViewsProps) => {
-	const { videos, totalViews, lastUpdated, polling, countdown, fetchAll, formatViews } =
-		useTrailerViews(videoIds);
+	const {
+		videos,
+		totalViews,
+		lastUpdated,
+		polling,
+		countdown,
+		fetchAll,
+		formatViews,
+		snapshotTime,
+	} = useTrailerViews(videoIds);
 
 	return (
 		<div className="app" style={{ '--accent-color': accentColor } as React.CSSProperties}>
@@ -54,7 +61,11 @@ const GameTrailerViews = ({
 
 				<TotalViews totalViews={totalViews} />
 
-				<TrailerVideos videos={videos} formatViews={formatViews} />
+				<TrailerVideos
+					videos={videos}
+					formatViews={formatViews}
+					snapshotTime={snapshotTime}
+				/>
 
 				<div className="status-bar">
 					<div className="status-left">

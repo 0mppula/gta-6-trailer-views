@@ -34,6 +34,11 @@ function loadSnapshot(): Record<string, number> {
 	}
 }
 
+function loadSnapshotTime(): number | null {
+	const t = localStorage.getItem('views-snapshot-time');
+	return t ? Number(t) : null;
+}
+
 function saveSnapshot(
 	videoIds: VideoId[],
 	results: PromiseSettledResult<{
@@ -49,6 +54,18 @@ function saveSnapshot(
 		}
 	});
 	localStorage.setItem('views-snapshot', JSON.stringify(snapshot));
+	localStorage.setItem('views-snapshot-time', Date.now().toString());
+}
+
+export function formatTimeAgo(timestamp: number): string {
+	const diff = Date.now() - timestamp;
+	const minutes = Math.floor(diff / 60_000);
+	const hours = Math.floor(diff / 3_600_000);
+	const days = Math.floor(diff / 86_400_000);
+	if (days > 0) return `${days}d ago`;
+	if (hours > 0) return `${hours}h ago`;
+	if (minutes > 0) return `${minutes}m ago`;
+	return 'just now';
 }
 
 export interface UseTrailerViewsResult {
@@ -59,6 +76,7 @@ export interface UseTrailerViewsResult {
 	countdown: number;
 	fetchAll: () => Promise<void>;
 	formatViews: (views: number | null) => string;
+	snapshotTime: number | null;
 }
 
 export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
@@ -80,13 +98,13 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 	const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 	const [polling, setPolling] = useState(false);
 	const [countdown, setCountdown] = useState(POLL_INTERVAL / 1000);
+	const [snapshotTime] = useState<number | null>(loadSnapshotTime);
 	const countdownRef = useRef<number | null>(null);
 	const pollRef = useRef<number | null>(null);
 
 	if (prevVideoIds !== videoIds) {
 		const newSnapshot = loadSnapshot();
 		setPrevVideoIds(videoIds);
-
 		setVideos(
 			videoIds.map((v) => ({
 				...v,
@@ -171,5 +189,6 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 		countdown,
 		fetchAll,
 		formatViews,
+		snapshotTime,
 	};
 }
