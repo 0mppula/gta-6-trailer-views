@@ -44,34 +44,47 @@ interface ClickableContentProps {
 	index: number;
 }
 
-const ClickableContent = ({ v, href, formatViews, index }: ClickableContentProps) => (
-	<a
-		href={href}
-		target="_blank"
-		rel="noopener noreferrer"
-		style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
-	>
-		<VideoTitle title={v.title || v.label} />
+const ClickableContent = ({ v, href, formatViews, index }: ClickableContentProps) => {
+	const viewDiff =
+		v.previousViews !== null && v.views !== null && v.views !== v.previousViews
+			? v.views - v.previousViews
+			: null;
 
-		<div className="thumbnail-wrapper">
-			<img
-				src={`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`}
-				alt={v.title || v.label}
-				className="video-thumbnail"
-			/>
-			<div className="video-index">#{index}</div>
-		</div>
+	return (
+		<a
+			href={href}
+			target="_blank"
+			rel="noopener noreferrer"
+			style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+		>
+			<VideoTitle title={v.title || v.label} />
 
-		<div className="video-views">
-			<CounterAnimation value={v.views} />
-		</div>
+			<div className="thumbnail-wrapper">
+				<img
+					src={`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`}
+					alt={v.title || v.label}
+					className="video-thumbnail"
+				/>
+				<div className="video-index">#{index}</div>
+			</div>
 
-		<div className="video-views-label">
-			{formatViews(v.views)} Views ·{' '}
-			{v.publishedAt && new Date(v.publishedAt).toLocaleDateString('en-GB')}
-		</div>
-	</a>
-);
+			<div className="video-views">
+				<CounterAnimation value={v.views} />
+			</div>
+
+			<div className="video-views-label">
+				{formatViews(v.views)} Views ·{' '}
+				{v.publishedAt && new Date(v.publishedAt).toLocaleDateString('en-GB')}
+			</div>
+
+			{viewDiff !== null && (
+				<div className="video-views-label" style={{ color: '#555' }}>
+					+{formatViews(viewDiff)} since last visit
+				</div>
+			)}
+		</a>
+	);
+};
 
 interface NonClickableContentProps {
 	v: VideoData;

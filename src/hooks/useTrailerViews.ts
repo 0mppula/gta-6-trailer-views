@@ -26,6 +26,31 @@ async function fetchYouTubeVideoData(
 	};
 }
 
+function loadSnapshot(): Record<string, number> {
+	try {
+		return JSON.parse(localStorage.getItem('views-snapshot') || '{}');
+	} catch {
+		return {};
+	}
+}
+
+function saveSnapshot(
+	videoIds: VideoId[],
+	results: PromiseSettledResult<{
+		views: number;
+		title: string | null;
+		publishedAt: string | null;
+	}>[],
+) {
+	const snapshot: Record<string, number> = {};
+	results.forEach((result, i) => {
+		if (result.status === 'fulfilled') {
+			snapshot[videoIds[i].id] = result.value.views;
+		}
+	});
+	localStorage.setItem('views-snapshot', JSON.stringify(snapshot));
+}
+
 export interface UseTrailerViewsResult {
 	videos: VideoData[];
 	totalViews: number | null;
@@ -37,10 +62,14 @@ export interface UseTrailerViewsResult {
 }
 
 export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
+	const snapshot = loadSnapshot();
+	const snapshotSavedRef = useRef(false);
+
 	const [videos, setVideos] = useState<VideoData[]>(
 		videoIds.map((v) => ({
 			...v,
 			views: null,
+			previousViews: snapshot[v.id] ?? null,
 			title: null,
 			publishedAt: null,
 			loading: true,
@@ -55,11 +84,14 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 	const pollRef = useRef<number | null>(null);
 
 	if (prevVideoIds !== videoIds) {
+		const newSnapshot = loadSnapshot();
 		setPrevVideoIds(videoIds);
+
 		setVideos(
 			videoIds.map((v) => ({
 				...v,
 				views: null,
+				previousViews: newSnapshot[v.id] ?? null,
 				title: null,
 				publishedAt: null,
 				loading: true,
@@ -74,6 +106,11 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 
 		const results = await Promise.allSettled(videoIds.map((v) => fetchYouTubeVideoData(v.id)));
 
+		if (!snapshotSavedRef.current) {
+			saveSnapshot(videoIds, results);
+			snapshotSavedRef.current = true;
+		}
+
 		setVideos((prev) =>
 			prev.map((v, i) => {
 				const result = results[i];
@@ -83,8 +120,9 @@ export function useTrailerViews(videoIds: VideoId[]): UseTrailerViewsResult {
 					return {
 						...v,
 						views: result.value.views,
+						previousViews: v.previousViews,
 						title: result.value.title,
-						publishedAt: result.value.publishedAt, // ← missing
+						publishedAt: result.value.publishedAt,
 						loading: false,
 						error: null,
 					};
