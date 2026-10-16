@@ -22,6 +22,10 @@ export const GTA_6_TRAILER_VIDEO_IDS = [
 		id: 'tJbzMqJGH4k',
 		label: 'Grand Theft Auto VI: An Extended Look',
 	},
+	{
+		id: 'rz1B4B2yBZY',
+		label: 'Grand Theft Auto VI Launch Trailer',
+	},
 ];
 
 export const GTA_5_TRAILER_VIDEO_IDS = [
